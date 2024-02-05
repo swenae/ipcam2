@@ -34,6 +34,7 @@
 # 3x short - boot finished, starting recording                                   #
 # 2x long  - recording finished, sftp upload starts                              #
 # 4x short - sftp upload finished, now shutting down                             #
+# 1x long  - sftp upload error                                                   #
 #                                                                                #
 #--------------------------------------------------------------------------------#
 
@@ -90,7 +91,7 @@ def blink(type):
       GPIO.output(20, GPIO.LOW)
       time.sleep(0.3)
       GPIO.output(20, GPIO.HIGH)
-   if type == 2: # 1 x long
+   if type == 2: # 2 x long
       GPIO.output(20, GPIO.LOW)
       time.sleep(1)
       GPIO.output(20, GPIO.HIGH)
@@ -113,6 +114,10 @@ def blink(type):
       time.sleep(0.3)
       GPIO.output(20, GPIO.LOW)
       time.sleep(0.3)
+      GPIO.output(20, GPIO.HIGH)
+   if type == 4: # 1 x long
+      GPIO.output(20, GPIO.LOW)
+      time.sleep(1)
       GPIO.output(20, GPIO.HIGH)
 
 #--------------------------------------------------------------------------------#
@@ -197,6 +202,7 @@ except:
    print(" ")
    print("Keine FTP-Uebertragung moeglich.")
    print(" ") 
+   blink(4)
 
 #----------------------------------------------
 # ending up
