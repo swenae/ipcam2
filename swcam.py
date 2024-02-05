@@ -173,26 +173,34 @@ img2.write(fname01)
 
 blink(2)
 print(" ")
-print("FTP-Uebertragung.")
+print("FTP-Uebertragung...")
 
-transport = paramiko.Transport((fhost))
-transport.connect(username=fuser, password=fpass)
-sftp = paramiko.SFTPClient.from_transport(transport)
+try:
+   
+   transport = paramiko.Transport((fhost))
+   transport.connect(username=fuser, password=fpass)
+   sftp = paramiko.SFTPClient.from_transport(transport)
+   
+   sftp.put(flocal + fname01, fpath01 + fname01)
+   sftp.put(flocal + fname01, fpath02 + fname02)
+   
+   sftp.close()
+   transport.close()
+   
+   print(" ")
+   print("Fertig.")
+   print(" ")
+   blink(3)
 
-sftp.put(flocal + fname01, fpath01 + fname01)
-sftp.put(flocal + fname01, fpath02 + fname02)
+except:
 
-sftp.close()
-transport.close()
-
-print(" ")
-print("Fertig.")
-print(" ")
+   print(" ")
+   print("Keine FTP-Uebertragung moeglich.")
+   print(" ") 
 
 #----------------------------------------------
 # ending up
 
-blink(3)
 #bfl = False
 #if GPIO.input(21) == 0: bfl = True
 
