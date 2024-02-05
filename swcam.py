@@ -121,99 +121,104 @@ def blink(type):
       GPIO.output(20, GPIO.HIGH)
 
 #--------------------------------------------------------------------------------#
-# main
+# program entry
+#--------------------------------------------------------------------------------#
 
-# console welcome screen
-print(" ")
-print("--------------------------------")
-print("  Starte IP Cam R2.0 240120...  ")
-print("--------------------------------")
-print(" ")
+if __name__ == "__main__":
 
+   # console welcome screen
+   print(" ")
+   print("--------------------------------")
+   print("  Starte IP Cam R2.0 240120...  ")
+   print("--------------------------------")
+   print(" ")
+   
 #----------------------------------------------
 # preparing
-
-print("Nehme Foto auf...")
-print(" ")
-
-blink(1)
-
-fname01 = "swcam.jpg"
-
-fname02 = datetime.datetime.now().strftime(filestamp) + ".jpg"
-pstring = datetime.datetime.now().strftime(picstamp)
-
+   
+   print("Nehme Foto auf...")
+   print(" ")
+   
+   blink(1)
+   
+   fname01 = "swcam.jpg"
+   
+   fname02 = datetime.datetime.now().strftime(filestamp) + ".jpg"
+   pstring = datetime.datetime.now().strftime(picstamp)
+   
 #----------------------------------------------
 # recording
-
-picam2 = Picamera2()
-picam2.start_preview(Preview.NULL)
-preview_config = picam2.create_preview_configuration()
-still_config = picam2.create_still_configuration({'size': psize})
-picam2.configure(still_config)
-picam2.start()
-time.sleep(2)
-metadata = picam2.capture_file("ftemp.jpg")
-picam2.close()
-
+   
+   picam2 = Picamera2()
+   picam2.start_preview(Preview.NULL)
+   preview_config = picam2.create_preview_configuration()
+   still_config = picam2.create_still_configuration({'size': psize})
+   picam2.configure(still_config)
+   picam2.start()
+   time.sleep(2)
+   metadata = picam2.capture_file("ftemp.jpg")
+   picam2.close()
+   
 #----------------------------------------------
 # image processing
-
-img = pmagick.Image("ftemp.jpg")
-img.quality(96)
-img.crop(pcrop)
-img.write("ftemp2.jpg")
-
-img2 = pmagick.Image("ftemp2.jpg")
-text = pmagick.DrawableText(200, 920,"Webcam Auerbach                 " + pstring + "                 www.smartewelt.de")
-img2.quality(96)
-img2.font(pfont)
-img2.fontPointsize(33)
-img2.penColor("#FFF")
-img2.draw(text)
-img2.write(fname01)
-
+   
+   img = pmagick.Image("ftemp.jpg")
+   img.quality(96)
+   img.crop(pcrop)
+   img.write("ftemp2.jpg")
+   
+   img2 = pmagick.Image("ftemp2.jpg")
+   text = pmagick.DrawableText(200, 920,"Webcam Auerbach                 " + pstring + "                 www.smartewelt.de")
+   img2.quality(96)
+   img2.font(pfont)
+   img2.fontPointsize(33)
+   img2.penColor("#FFF")
+   img2.draw(text)
+   img2.write(fname01)
+   
 #----------------------------------------------
 # sftp upload
-
-blink(2)
-print(" ")
-print("FTP-Uebertragung...")
-
-try:
    
-   transport = paramiko.Transport((fhost))
-   transport.connect(username=fuser, password=fpass)
-   sftp = paramiko.SFTPClient.from_transport(transport)
-   
-   sftp.put(flocal + fname01, fpath01 + fname01)
-   sftp.put(flocal + fname01, fpath02 + fname02)
-   
-   sftp.close()
-   transport.close()
-   
+   blink(2)
    print(" ")
-   print("Fertig.")
-   print(" ")
-   blink(3)
-
-except:
-
-   print(" ")
-   print("Keine FTP-Uebertragung moeglich.")
-   print(" ") 
-   blink(4)
-
+   print("FTP-Uebertragung...")
+   
+   try:
+      
+      transport = paramiko.Transport((fhost))
+      transport.connect(username=fuser, password=fpass)
+      sftp = paramiko.SFTPClient.from_transport(transport)
+      
+      sftp.put(flocal + fname01, fpath01 + fname01)
+      sftp.put(flocal + fname01, fpath02 + fname02)
+      
+      sftp.close()
+      transport.close()
+      
+      print(" ")
+      print("Fertig.")
+      print(" ")
+      blink(3)
+   
+   except:
+   
+      print(" ")
+      print("Keine FTP-Uebertragung moeglich.")
+      print(" ") 
+      blink(4)
+   
 #----------------------------------------------
 # ending up
+   
+   #bfl = False
+   #if GPIO.input(21) == 0: bfl = True
+   
+   GPIO.cleanup()
+   
+   #if bfl : subprocess.call(["sudo","shutdown","now"])
+   
+   subprocess.call(["sudo","shutdown","now"])
 
-#bfl = False
-#if GPIO.input(21) == 0: bfl = True
-
-GPIO.cleanup()
-
-#if bfl : subprocess.call(["sudo","shutdown","now"])
-
-subprocess.call(["sudo","shutdown","now"])
-
+#--------------------------------------------------------------------------------#
+# physical end
 #--------------------------------------------------------------------------------#
