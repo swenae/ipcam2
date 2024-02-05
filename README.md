@@ -19,6 +19,6 @@ This is our first build in this configuration. Reason for version number "2" tha
 4x short - sftp upload finished, now shutting down    
 1x long  - sftp upload error    
 
-### Images in images folder
+### Images folder
 
 ip-weather-cam.jpg - Our Cam
