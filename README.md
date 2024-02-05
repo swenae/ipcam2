@@ -5,8 +5,8 @@ This is our ip-cam script in Python3, picamera2-library based on libcamera softw
 ### Presets                                                                        
 
 The scripts are located in a "scripts" folder in the Pi's home directory under "/home/~/scripts". To install paramiko and pythonmagick please do        
-sudo apt install python3-paramiko                                              
-sudo apt install python3-pythonmagick                                          
+$ sudo apt install python3-paramiko                                              
+$ sudo apt install python3-pythonmagick                                          
                                                                                 
 ### Notes                                                                          
 
@@ -18,3 +18,7 @@ This is our first build in this configuration. Reason for version number "2" tha
 2x long  - recording finished, sftp upload starts                              
 4x short - sftp upload finished, now shutting down    
 1x long  - sftp upload error    
+
+### Images in images folder
+
+ip-weather-cam.jpg - Our Cam
